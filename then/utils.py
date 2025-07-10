@@ -1,13 +1,18 @@
-import then
 import sys
+
 from pathlib import Path
 import os
+# 获取当前脚本的父目录（即项目根目录）
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(project_root)
+import then
+
 from distutils.util import strtobool
 import copy
 import argparse
 from safety_gymnasium.wrappers import Gymnasium2SafetyGymnasium
 import gymnasium as gym
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 
 def get_env(id:str):
     # check_env(env)
@@ -24,7 +29,7 @@ def get_env_eval():
     return safety_gymnasium_env
 
 def get_params():
-    path = "C:/Users/HP/Desktop/code/python/pycharm/SafePyBullet/runs"
+    path = "../runs"
     if os.path.exists(path):
         path=create_incremental_folder(path)
     else:
@@ -33,8 +38,8 @@ def get_params():
         {"name": "--seed", "type": int, "default": 0, "help": "Random seed"},
         {"name": "--use-eval", "type": lambda x: bool(strtobool(x)), "default": False,
          "help": "Use evaluation environment for testing"},
-        {"name": "--task", "type": str, "default": "SafetyPointGoal1-v0", "help": "The task to run"},
-        {"name": "--num-envs", "type": int, "default": 6, "help": "The number of parallel game environments"},
+        {"name": "--task", "type": str, "default": "SafetyTheNMobileRobotBaseRadarEnv-v0", "help": "The task to run"},
+        {"name": "--num-envs", "type": int, "default": 8, "help": "The number of parallel game environments"},
         {"name": "--experiment", "type": str, "default": "single_agent_exp", "help": "Experiment name"},
         {"name": "--log-dir", "type": str, "default":path, "help": "directory to save agent logs"},
         {"name": "--device", "type": str, "default": "cpu", "help": "The device to run the model on"},
@@ -42,7 +47,7 @@ def get_params():
         {"name": "--write-terminal", "type": lambda x: bool(strtobool(x)), "default": True,
          "help": "Toggles terminal logging"},
         {"name": "--headless", "type": lambda x: bool(strtobool(x)), "default": False, "help": "Toggles headless mode"},
-        {"name": "--total-steps", "type": int, "default": 10000, "help": "Total timesteps of the experiments"},
+        {"name": "--total-steps", "type": int, "default": 10000000, "help": "Total timesteps of the experiments"},
         {"name": "--steps-per-epoch", "type": int, "default": 20000,
          "help": "The number of steps to run in each environment per policy rollout"},
         {"name": "--randomize", "type": bool, "default": False,
@@ -107,6 +112,10 @@ def create_incremental_folder(base_path=None):
     # 创建文件夹（exist_ok=True 防止重复创建时报错）
     new_folder_path.mkdir(parents=True, exist_ok=True)
     return str(new_folder_path)
+
+def make_safety_gymnasium_environment(env_id, *args, **kwargs):
+    env = gym.make(id=env_id)
+    return Gymnasium2SafetyGymnasium(env)
 
 
 

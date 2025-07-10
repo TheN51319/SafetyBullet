@@ -10,7 +10,7 @@ python ppo_lag.py   --task SafetyPointGoal1-v0   --experiment ppo_lag_exp
 
 cd safepo/
 python evaluate.py --benchmark-dir runs\ppo_lag_exp --eval-episodes 10
-python evaluate.py --benchmark-dir runs\single_agent_exp --eval-episodes 100
+python evaluate.py --benchmark-dir runs\single_agent_exp --eval-episodes 10
 
 cd safepo/
 python plot.py --logdir ./runs/single_agent_exp
